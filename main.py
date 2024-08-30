@@ -1,6 +1,8 @@
 """
 Install the Google AI Python SDK
+also install python dotenv library
 
+$ pip install python-dotenv
 $ pip install google-generativeai
 """
 from dotenv import load_dotenv
