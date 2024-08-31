@@ -35,13 +35,13 @@ chat_session = model.start_chat(
 )
 
 def get_gemini_response(prompt):
-  response = chat_session.send_message(prompt,stream=True).text
+  response = chat_session.send_message(prompt).text
   return response
 
 while True:
   try:
-    prompt=input("Enter Your Prompt: ")
-    print(get_gemini_response(prompt))
+    prompt=input("Prompt : ")
+    print(f"WeCode Ai : {get_gemini_response(prompt)}")
   except KeyboardInterrupt:
     exit()
 
