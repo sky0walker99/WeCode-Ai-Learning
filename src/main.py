@@ -44,4 +44,4 @@ while True:
     print(f"WeCode Ai : {get_gemini_response(prompt)}")
   except KeyboardInterrupt:
     exit()
-
+#hjfokewo
