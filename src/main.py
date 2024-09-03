@@ -50,31 +50,47 @@ custom_model=genai.GenerativeModel( #ai model for custom learning method
     system_instruction="You are an ai model designed for teaching Data Structures and algorithm  using the custom method which is created by the user.you are a high quality ai learning assistant developed by team wecode."
     )
 
-# creating chat sessions
-socratic_chat = socratic_model.start_chat(history=[])
-sentiment_chat = sentiment_model.start_chat(history=[])
 
+# creating chat sessions
+sentiment_chat = sentiment_model.start_chat(history=[])
+socratic_chat = socratic_model.start_chat(history=[])
+feynman_chat=feynman_model.start_chat(history=[])
 # result of the sentiment analysis
 def get_result_sentiment(user_prompt):
-    result = sentiment_chat.send_message(user_prompt).text
+    result = sentiment_chat.send_message(user_prompt).text.strip()
     return result
 
 # Function for getting the prompt from the socratic model.
-def get_gemini_response(user_prompt):
+def get_socratic_response(user_prompt):
     response = socratic_chat.send_message(user_prompt).text
     return response
-
+def get_feynman_response(user_prompt):
+    response=feynman_chat.send_message(user_prompt).text
+    return response
 # score card system - dynamically choosing the learning method for the user.
 review = ["positive", "neutral", "negative"]
-socratic_score = 0
 
+def score(result,socratic_score):
 
+    if result==review[0]:
+        socratic_score+=1
+    elif result==review[2]:
+        socratic_score-=1
+    return socratic_score
+    
+socratic_score=0
 # Loop for continous Chat with the model(socratic).
 while True:
     try:
         user_prompt = input("Prompt : ")
-        print(f"WeCode Ai : {get_gemini_response(user_prompt)}")
+        result : str = get_result_sentiment(user_prompt)
+        print(f"WeCode Ai : {get_socratic_response(user_prompt)}")
         print(f"Sentiment Analysis: {get_result_sentiment(user_prompt)}")
-        result = get_result_sentiment(user_prompt)
+        socratic_score=score(result,socratic_score)
+        print(f"socratic score={socratic_score}")
+        if socratic_score<=-1:
+            print(f"WeCode Ai : {get_feynman_response(user_prompt)}")
+            user_prompt = input("Prompt : ")
+        
     except KeyboardInterrupt:
         exit()
