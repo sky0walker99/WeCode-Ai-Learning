@@ -58,9 +58,22 @@ def get_gemini_response(user_prompt):
     response = chat_session.send_message(user_prompt).text
     return response
 
+
+
 # score card system - dynamically choosing the learning method for the user.
 review = ["positive", "neutral", "negative"]
 socratic_score = 0
+socratic_model_sen = 0
+fley_model_sen =0
+def score_card(result):
+   if result == 'positive':
+    socratic_score +=1
+    socratic_model_sen = min(socratic_score or socratic_model_sen)
+      #gh
+    if socratic_score <=0:
+       #tg
+       
+   
 
 
 # Loop for continous Chat with the model(socratic).
