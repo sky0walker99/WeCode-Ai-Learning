@@ -1,21 +1,56 @@
-"""
-Install the Google AI Python SDK
-Install python-dotenv
-$ pip install python-dotenv
-$ pip install google-generativeai
-"""
-
-# python-dotenv library to getting the api key from the .env file.
+import sqlite3
 from dotenv import load_dotenv
-load_dotenv()
-
 import os
 import google.generativeai as genai
 
+# Load the API key from the .env file
+load_dotenv()
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
+# Initialize the database
+def init_db():
+    conn = sqlite3.connect('model_sentiment.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS SentimentCount (
+            model TEXT PRIMARY KEY,
+            positive_count INTEGER
+        )
+    ''')
+    conn.commit()
+    cursor.execute('''
+        INSERT OR IGNORE INTO SentimentCount (model, positive_count) VALUES 
+        ('socratic', 0),
+        ('feynman', 0),
+        ('third', 0)
+    ''')
+    conn.commit()
+    conn.close()
 
-# Creating the ai models.
+# Update positive sentiment count for a model
+def update_positive_sentiment(model):
+    conn = sqlite3.connect('model_sentiment.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE SentimentCount 
+        SET positive_count = positive_count + 1 
+        WHERE model = ?
+    ''', (model,))
+    conn.commit()
+    conn.close()
+
+# Get the current positive sentiment count
+def get_positive_sentiment(model):
+    conn = sqlite3.connect('model_sentiment.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT positive_count FROM SentimentCount WHERE model = ?
+    ''', (model,))
+    count = cursor.fetchone()[0]
+    conn.close()
+    return count
+
+# Model configuration
 generation_config = {  
     "temperature": 0.225,
     "top_p": 0.95,
@@ -23,6 +58,7 @@ generation_config = {
     "max_output_tokens": 8192,
     "response_mime_type": "text/plain",
 }
+
 sentiment_model = genai.GenerativeModel(# creating the model for sentiment analysis.
     model_name="gemini-1.5-flash",
     generation_config=generation_config,tools="code_execution",
@@ -49,48 +85,79 @@ custom_model=genai.GenerativeModel( #ai model for custom learning method
     generation_config=generation_config,tools="code_execution",
     system_instruction="You are an ai model designed for teaching Data Structures and algorithm  using the custom method which is created by the user.you are a high quality ai learning assistant developed by team wecode."
     )
-
-
-# creating chat sessions
+# Start chat sessions
 sentiment_chat = sentiment_model.start_chat(history=[])
 socratic_chat = socratic_model.start_chat(history=[])
-feynman_chat=feynman_model.start_chat(history=[])
-# result of the sentiment analysis
+feynman_chat = feynman_model.start_chat(history=[])
+third_chat = third_model.start_chat(history=[])
+
+# Sentiment analysis function
 def get_result_sentiment(user_prompt):
     result = sentiment_chat.send_message(user_prompt).text.strip()
     return result
 
-# Function for getting the prompt from the socratic model.
-def get_socratic_response(user_prompt):
-    response = socratic_chat.send_message(user_prompt).text
-    return response
-def get_feynman_response(user_prompt):
-    response=feynman_chat.send_message(user_prompt).text
-    return response
-# score card system - dynamically choosing the learning method for the user.
-review = ["positive", "neutral", "negative"]
+# Function to get a response from the current AI model
+def get_response(chat, user_prompt):
+    return chat.send_message(user_prompt).text
 
-def score(result,socratic_score):
+# Score function to evaluate sentiment and update score
+def update_score(result, current_score, model_name):
+    review = ["positive", "neutral", "negative"]
+    if result == review[0]:
+        current_score += 1
+        update_positive_sentiment(model_name)  # Update positive sentiment count in DB
+    elif result == review[2]:
+        current_score -= 1
+    return current_score
 
-    if result==review[0]:
-        socratic_score+=1
-    elif result==review[2]:
-        socratic_score-=1
-    return socratic_score
-    
-socratic_score=0
-# Loop for continous Chat with the model(socratic).
+# Initialize database and scores
+init_db()
+socratic_score = 0
+feynman_score = 0
+third_score = 0
+current_model = socratic_model
+current_chat = socratic_chat
+
+# Main interaction loop
 while True:
     try:
-        user_prompt = input("Prompt : ")
-        result : str = get_result_sentiment(user_prompt)
-        print(f"WeCode Ai : {get_socratic_response(user_prompt)}")
-        print(f"Sentiment Analysis: {get_result_sentiment(user_prompt)}")
-        socratic_score=score(result,socratic_score)
-        print(f"socratic score={socratic_score}")
-        if socratic_score<=-1:
-            print(f"WeCode Ai : {get_feynman_response(user_prompt)}")
-            user_prompt = input("Prompt : ")
+        user_prompt = input("Prompt: ")
         
+        # Sentiment analysis and response generation
+        result = get_result_sentiment(user_prompt)
+        print(f"WeCode Ai: {get_response(current_chat, user_prompt)}")
+        print(f"Sentiment Analysis: {result}")
+
+        # Update score and check if model needs to be switched
+        if current_model == socratic_model:
+            socratic_score = update_score(result, socratic_score, 'socratic')
+            print(f"Socratic Score: {socratic_score}")
+            print(f"Socratic Positive Count: {get_positive_sentiment('socratic')}")
+            if socratic_score <= -2:
+                current_model = feynman_model
+                current_chat = feynman_chat
+                socratic_score = 0  # Reset score for next model
+                print("Switching to Feynman model...")
+        
+        elif current_model == feynman_model:
+            feynman_score = update_score(result, feynman_score, 'feynman')
+            print(f"Feynman Score: {feynman_score}")
+            print(f"Feynman Positive Count: {get_positive_sentiment('feynman')}")
+            if feynman_score <= -2:
+                current_model = third_model
+                current_chat = third_chat
+                feynman_score = 0  # Reset score for next model
+                print("Switching to Third model...")
+
+        elif current_model == third_model:
+            third_score = update_score(result, third_score, 'third')
+            print(f"Third Model Score: {third_score}")
+            print(f"Third Model Positive Count: {get_positive_sentiment('third')}")
+            if third_score <= -2:
+                current_model = socratic_model
+                current_chat = socratic_chat
+                third_score = 0  # Reset score for next model
+                print("Switching back to Socratic model...")
+
     except KeyboardInterrupt:
         exit()
