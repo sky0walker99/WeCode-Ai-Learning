@@ -176,8 +176,7 @@ while True:
 
         elif current_model == custom_model:
             custom_score = update_score(result, custom_score, "custom")
-            user_sys_instruct = input(
-                "Write the instructions you want to give for the ai : " )
+            user_sys_instruct = input("Write the instructions you want to give for the ai : " )
             sys_instruct = user_sys_instruct
             print(f"Custom Score: {custom_score}")
             print(f"Custom Positive Count: {get_positive_sentiment('custom')}")
