@@ -186,5 +186,6 @@ while True:
                 custom_score = 0  # Reset score for next model
                 print(" Switching back to socratic model ")
 
+
     except KeyboardInterrupt:
         exit()
