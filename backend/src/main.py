@@ -4,6 +4,11 @@ import os
 import google.generativeai as genai
 from IPython.display import Image
 import requests
+from flask import Flask, request, jsonify
+from datetime import datetime, timedelta
+
+# Creating web application instance
+app = Flask(__name__)
 
 # Load the API key from the .env file
 load_dotenv()
@@ -14,6 +19,8 @@ genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 def init_db():
     conn = sqlite3.connect("model_sentiment.db")
     cursor = conn.cursor()
+    
+    # Create SentimentCount table if not exists
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS SentimentCount (
@@ -22,6 +29,19 @@ def init_db():
         )
     """
     )
+    
+    # Create ChatHistory table for storing chat sessions, with a day_category column
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS ChatHistory (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            model TEXT,
+            user_message TEXT,
+            ai_response TEXT,
+            timestamp DATETIME,
+            day_category TEXT
+        )
+    ''')
+    
     conn.commit()
     cursor.execute(
         """
@@ -33,6 +53,49 @@ def init_db():
     conn.commit()
     conn.close()
 
+# Function to classify the chat into day categories (today, yesterday, previous 7 days, older)
+def get_day_category(timestamp):
+    now = datetime.now()
+    today = now.date()
+    yesterday = today - timedelta(days=1)
+    week_ago = today - timedelta(days=7)
+    timestamp_date = timestamp.date()
+    
+    if timestamp_date == today:
+        return "today"
+    elif timestamp_date == yesterday:
+        return "yesterday"
+    elif timestamp_date >= week_ago:
+        return "previous 7 days"
+    else:
+        return "older"
+
+# Function to save chat history, with day category
+def save_chat_history(model, user_message, ai_response):
+    conn = sqlite3.connect('model_sentiment.db')
+    cursor = conn.cursor()
+    timestamp = datetime.now()
+    day_category = get_day_category(timestamp)  # Classify the chat based on the day
+    cursor.execute('''
+        INSERT INTO ChatHistory (model, user_message, ai_response, timestamp, day_category)
+        VALUES (?, ?, ?, ?, ?)
+    ''', (model, user_message, ai_response, timestamp, day_category))
+    conn.commit()
+    conn.close()
+
+# Function to retrieve chats in the requested categories
+def get_chat_by_category(category):
+    conn = sqlite3.connect('model_sentiment.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT model, user_message, ai_response, timestamp 
+        FROM ChatHistory 
+        WHERE day_category = ?
+        ORDER BY timestamp DESC
+    ''', (category,))
+    chats = cursor.fetchall()
+    conn.close()
+    return chats
 
 # Update positive sentiment count for a model
 def update_positive_sentiment(model):
@@ -49,7 +112,6 @@ def update_positive_sentiment(model):
     conn.commit()
     conn.close()
 
-
 # Get the current positive sentiment count
 def get_positive_sentiment(model):
     conn = sqlite3.connect("model_sentiment.db")
@@ -64,8 +126,7 @@ def get_positive_sentiment(model):
     conn.close()
     return count
 
-
-# Model configuration
+# Model initialization and configuration 
 generation_config = {
     "temperature": 0.225,
     "top_p": 0.95,
@@ -73,12 +134,14 @@ generation_config = {
     "max_output_tokens": 8192,
     "response_mime_type": "text/plain",
 }
-sys_instruct = None
+
+sys_instruct = ""
+
 sentiment_model = genai.GenerativeModel(  # creating the model for sentiment analysis.
     model_name="gemini-1.5-flash",
     generation_config=generation_config,
     tools="code_execution",
-    system_instruction='You are an AI model specifically designed to analyze the sentiment of user responses to a teacher during the learning process, particularly in the context of Data Structures and Algorithms.\nYour task is to review each user response and categorize the sentiment as one of the following: "positive," "neutral," or "negative."\n\nPositive: Indicates enthusiasm, understanding, satisfaction, or constructive engagement with the material.\nNeutral: Shows a lack of strong emotion, a balanced or indifferent response, or factual statements without an emotional undertone.\nNegative: Reflects frustration, confusion, dissatisfaction, or disengagement with the material.\n\nIrregardles of the input you have given you output only the sentiment label  ("positive," "neutral," or "negative") based on your analysis of each user response. if you need more information to understand the input or have no context regarding it just give response as neutral. always give any one of the review from positive,negative,neutral.',
+    system_instruction='You are an AI model specifically designed for analyzing the sentiment of user responses to a teacher during the learning process, particularly in the context of Data Structures and Algorithms.\nYour task is to categorize each user response into one of the following sentiment labels: "positive," "neutral," or "negative."\n\n- Positive: Indicates enthusiasm, understanding, satisfaction, or constructive engagement with the material.\n- Neutral: Shows a lack of strong emotion, a balanced or indifferent response, or factual statements without an emotional undertone.\n- Negative: Reflects frustration, confusion, dissatisfaction, or disengagement with the material.\n\nWhen evaluating each user response, you must adhere strictly to the following guidelines:\n- Always respond only with one of the following labels: "positive," "neutral," or "negative."\n- Do not provide explanations, elaborations, or any responses other than these sentiment labels.\n- If the input is abstract, imaginative, or does not clearly indicate sentiment, classify it as "neutral" without attempting to interpret or elaborate.\n- Regardless of the complexity or nature of the input, your output must be limited to one of the predefined sentiment labels.\n\nYour primary goal is to ensure that every response you provide is one of the three sentiment categories. Any deviation from this will be considered incorrect.'
 )
 socratic_model = genai.GenerativeModel(  # ai model specifically used for socratic dialogue.
     model_name="gemini-1.5-pro",
@@ -99,24 +162,20 @@ custom_model = genai.GenerativeModel(  # ai model for custom learning method
     system_instruction=f"You are an ai model designed for teaching Data Structures and algorithm.you are a high quality ai learning assistant developed by team wecode. {sys_instruct}",
 )
 
-
 # Start chat sessions
 sentiment_chat = sentiment_model.start_chat(history=[])
 socratic_chat = socratic_model.start_chat(history=[])
 feynman_chat = feynman_model.start_chat(history=[])
 custom_chat = custom_model.start_chat(history=[])
 
-
 # Sentiment analysis function
 def get_result_sentiment(user_prompt):
     result = sentiment_chat.send_message(user_prompt).text.strip()
     return result
 
-
 # Function to get a response from the current AI model
 def get_response(chat, user_prompt):
     return chat.send_message(user_prompt).text
-
 
 # Score function to evaluate sentiment and update score
 def update_score(result, current_score, model_name):
@@ -127,7 +186,6 @@ def update_score(result, current_score, model_name):
     elif result == review[2]:
         current_score -= 1
     return current_score
-
 
 # Initialize database and scores
 init_db()
@@ -141,19 +199,23 @@ current_chat = socratic_chat
 while True:
     try:
         user_prompt = input("Prompt: ")
-
-        # Sentiment analysis
+        
+        # Sentiment analysis result
         result = get_result_sentiment(user_prompt)
-        # Response Generation
-        print(f"WeCode Ai: {get_response(current_chat, user_prompt)}")
+        
+        # Response Generation and saving chat in history.
+        ai_response = get_response(current_chat, user_prompt)
+        save_chat_history("socratic",user_prompt, ai_response) # saving chat history with category.
+        
+        print(f"WeCode Ai: {ai_response}")
         print(f"Sentiment Analysis: {result}")
 
-        # Update score and check if model needs to be switched
+        # Updating score and switching the model
         if current_model == socratic_model:
             socratic_score = update_score(result, socratic_score, "socratic")
             print(f"Socratic Score: {socratic_score}")
             print(f"Socratic Positive Count: {get_positive_sentiment('socratic')}")
-            if socratic_score <= -2:
+            if socratic_score < -2:
                 current_model = feynman_model
                 current_chat = feynman_chat
                 socratic_score = 0  # Reset score for next model
@@ -168,16 +230,13 @@ while True:
                 current_chat = custom_chat
                 feynman_score = 0  # Reset score for next model
                 print("Switching to custom model...")
-                choice = (
-                    input(
-                        "Do you want to create a custom ai model with the learning method you define (y/n) :"
-                    ).lower().strip()
-                )
+                choice = (input( "Do you want to create a custom ai model with the learning method you define (y/n) :").lower().strip() )
+                user_sys_instruct = input("Write the instructions you want to give for the ai : " )
+                sys_instruct = user_sys_instruct
 
         elif current_model == custom_model:
             custom_score = update_score(result, custom_score, "custom")
-            user_sys_instruct = input("Write the instructions you want to give for the ai : " )
-            sys_instruct = user_sys_instruct
+            
             print(f"Custom Score: {custom_score}")
             print(f"Custom Positive Count: {get_positive_sentiment('custom')}")
             if custom_score < -2:
@@ -186,6 +245,19 @@ while True:
                 custom_score = 0  # Reset score for next model
                 print(" Switching back to socratic model ")
 
+        """ chat history options
+        
+        Optional: You can retrieve chats by category when needed
+        today_chats = get_chat_by_category("today")
+        yesterday_chats = get_chat_by_category("yesterday")
+        previous_7_days_chats = get_chat_by_category("previous 7 days")
+        older_chats = get_chat_by_category("older")
 
+        """
     except KeyboardInterrupt:
         exit()
+
+
+# Start the server
+if __name__ == '__main__':
+    app.run(debug=True)
