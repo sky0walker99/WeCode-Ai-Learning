@@ -1,8 +1,12 @@
 # WeCode-Ai-Learning-Assistant
+# GENAI powered teaching assistant
+
+An AI-based tool designed to help users learn complex topics such as Data Structures and Algorithms (DSA). The assistant primarily utilizes the Socratic method of questioning but also includes alternative learning techniques. These techniques can be customized by the user to suit their learning style.
+
 
 This is an ai assistant which uses the socratic method of questioning for teaching in any topic in DSA and could and can explain any complex topic. The Model can dynamically understand the expertise level of the user of a given topic and the model can change the perception of the user if they explicitly say so. the default learning technique is socratic method.there is 1 more additonal learning method which the user can choose from which is Feynman Technique .Also most importantly the user can define and create a custom learning or teaching method of their own.The user
 
-
+---
 Complete System Architecture
 
 ```mermaid
@@ -57,7 +61,7 @@ graph TB
 ```
 
 
-
+---
 Class Diagram
 
 ```mermaid
@@ -89,7 +93,7 @@ classDiagram
 ```
 
 
-
+---
 Code Flow
 
 ```mermaid
@@ -114,7 +118,56 @@ graph TD
 
 
 
+---
+visualizes the interaction between users and the AI models in a more emotionally resonant and intuitive way.
+## Technical Implementation
 
+The diagram represents a sentiment-driven, adaptive multi-model AI system. Sentiment analysis is performed on each user interaction using a dedicated SentimentModel, quantifying emotional context. A cumulative scoring mechanism (-1 for negative, 0 for neutral, +1 for positive) triggers model switching when the score falls below -2. The system employs three distinct models (Socratic, Feynman, and Custom) with inheritance from a base AiModel class, each implementing unique response generation strategies. The Custom model, when activated, allows for dynamic system instruction updates, enhancing adaptability. This architecture enables continuous learning and optimization based on user interactions and feedback.
+
+
+```mermaid
+graph TD
+    subgraph "AI Models' Emotional Journey"
+        A[Start: Socratic Model] -->|User Interaction| B{Sentiment Analysis}
+        B -->|Positive| C[["😊 +1 Score"]]
+        B -->|Neutral| D[["😐 No Change"]]
+        B -->|Negative| E[["😢 -1 Score"]]
+        
+        C --> F{Score Check}
+        D --> F
+        E --> F
+        
+        F -->|Score >= -2| G[["🧠 Continue Learning"]]
+        F -->|Score < -2| H[["😰 Struggle"]]
+        
+        H -->|Switch Model| I[Feynman Model]
+        I --> J[["🔄 Reset Score"]]
+        J --> |User Interaction| B
+        
+        I -->|Multiple Struggles| K[Custom Model]
+        K -->|User Accepts| L[["🎨 Customization"]]
+        K -->|User Declines| M[["↩️ Return to Socratic"]]
+        
+        L --> |User Interaction| B
+        M --> A
+        
+        G -->|Continuous Learning| N[["🌟 AI Growth"]]
+        N -->|New Challenges| B
+    end
+
+    style A fill:#f9f,stroke:#333,stroke-width:4px
+    style I fill:#bbf,stroke:#333,stroke-width:4px
+    style K fill:#bfb,stroke:#333,stroke-width:4px
+    style C fill:#90EE90,stroke:#333,stroke-width:2px
+    style D fill:#F0E68C,stroke:#333,stroke-width:2px
+    style E fill:#FFA07A,stroke:#333,stroke-width:2px
+    style G fill:#98FB98,stroke:#333,stroke-width:2px
+    style H fill:#FFA07A,stroke:#333,stroke-width:2px
+    style L fill:#DDA0DD,stroke:#333,stroke-width:2px
+    style N fill:#87CEFA,stroke:#333,stroke-width:2px
+```
+
+---
 Chat History Database Flow
 
 ```mermaid
