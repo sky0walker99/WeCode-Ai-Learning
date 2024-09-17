@@ -5,7 +5,7 @@ This is an ai assistant which uses the socratic method of questioning for teachi
 
 Complete System Architecture
 
-'''mermaid
+```mermaid
 graph TB
     subgraph User Interface
         A[User Input] --> B[Main Interaction Loop]
@@ -57,7 +57,7 @@ graph TB
 
 Class Diagram
 
-'''mermaid
+```mermaid
 classDiagram
     class AiModel {
         -model
@@ -89,7 +89,7 @@ classDiagram
 
 Code Flow
 
-'''mermaid
+```mermaid
 graph TD
     A[Start] --> B[Get user prompt]
     B --> C[Perform sentiment analysis]
@@ -114,7 +114,7 @@ graph TD
 
 Chat History Database Flow
 
-'''mermaid
+```mermaid
 graph TD
     A[New Chat Entry] --> B{Categorize by Date}
     B -->|Same day| C[Today]
