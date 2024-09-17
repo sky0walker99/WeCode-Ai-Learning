@@ -54,6 +54,9 @@ graph TB
     B --> Q
     C --> R
     P --> S
+```
+
+
 
 Class Diagram
 
@@ -83,7 +86,7 @@ classDiagram
     AiModel <|-- SocraticModel
     AiModel <|-- FeynmanModel
     AiModel <|-- CustomModel
-
+```
 
 
 
@@ -107,7 +110,7 @@ graph TD
     K -->|No| M[Switch to Socratic model]
     L --> B
     M --> B
-
+```
 
 
 
@@ -145,3 +148,4 @@ graph TD
     O --> L
     O --> M
     end
+```
