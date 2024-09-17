@@ -3,8 +3,7 @@
 
 An AI-based tool designed to help users learn complex topics such as Data Structures and Algorithms (DSA). The assistant primarily utilizes the Socratic method of questioning but also includes alternative learning techniques. These techniques can be customized by the user to suit their learning style.
 
-
-This is an ai assistant which uses the socratic method of questioning for teaching in any topic in DSA and could and can explain any complex topic. The Model can dynamically understand the expertise level of the user of a given topic and the model can change the perception of the user if they explicitly say so. the default learning technique is socratic method.there is 1 more additonal learning method which the user can choose from which is Feynman Technique .Also most importantly the user can define and create a custom learning or teaching method of their own.The user
+The Model can dynamically understand the expertise level of the user of a given topic and the model can change the perception of the user if they explicitly say so. the default learning technique is socratic method.There is 1 more additonal learning method which the user can choose from which is Feynman Technique .Also most importantly the user can define and create a custom learning or teaching method of their own.The user
 
 ---
 Complete System Architecture
@@ -93,29 +92,6 @@ classDiagram
 ```
 
 
----
-Code Flow
-
-```mermaid
-graph TD
-    A[Start] --> B[Get user prompt]
-    B --> C[Perform sentiment analysis]
-    C --> D[Generate AI response]
-    D --> E[Save chat history]
-    E --> F[Update model score]
-    F --> G{Score < -2?}
-    G -->|Yes| H[Switch to next model]
-    G -->|No| B
-    H --> I{Is Custom Model?}
-    I -->|Yes| J[Ask for custom instructions]
-    I -->|No| B
-    J --> K{User wants custom?}
-    K -->|Yes| L[Set custom instructions]
-    K -->|No| M[Switch to Socratic model]
-    L --> B
-    M --> B
-```
-
 
 
 ---
@@ -126,6 +102,7 @@ The diagram represents a sentiment-driven, adaptive multi-model AI system. Senti
 
 
 ```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true }}}%%
 graph TD
     subgraph "AI Models' Emotional Journey"
         A[Start: Socratic Model] -->|User Interaction| B{Sentiment Analysis}
@@ -155,17 +132,55 @@ graph TD
         N -->|New Challenges| B
     end
 
-    style A fill:#f9f,stroke:#333,stroke-width:4px
-    style I fill:#bbf,stroke:#333,stroke-width:4px
-    style K fill:#bfb,stroke:#333,stroke-width:4px
-    style C fill:#90EE90,stroke:#333,stroke-width:2px
-    style D fill:#F0E68C,stroke:#333,stroke-width:2px
-    style E fill:#FFA07A,stroke:#333,stroke-width:2px
-    style G fill:#98FB98,stroke:#333,stroke-width:2px
-    style H fill:#FFA07A,stroke:#333,stroke-width:2px
-    style L fill:#DDA0DD,stroke:#333,stroke-width:2px
-    style N fill:#87CEFA,stroke:#333,stroke-width:2px
+    classDef default fill:#2a2a2a,stroke:#7a7a7a,color:#e0e0e0;
+    classDef model fill:#4a4a8c,stroke:#7a7aff,color:#ffffff,stroke-width:2px;
+    classDef positive fill:#2d6a4f,stroke:#40916c,color:#ffffff;
+    classDef neutral fill:#7d6608,stroke:#b7921e,color:#ffffff;
+    classDef negative fill:#991b1b,stroke:#dc2626,color:#ffffff;
+    classDef action fill:#374151,stroke:#6b7280,color:#ffffff;
+    
+    class A,I,K model;
+    class C positive;
+    class D neutral;
+    class E negative;
+    class G,L,N positive;
+    class H negative;
+    class B,F,J,M action;
 ```
+
+
+
+
+---
+Code Flow
+
+```mermaid
+graph TD
+    A[Start] --> B[Get user prompt]
+    B --> C[Perform sentiment analysis]
+    C --> D[Generate AI response]
+    D --> E[Save chat history]
+    E --> F[Update model score]
+    F --> G{Score < -2?}
+    G -->|Yes| H[Switch to next model]
+    G -->|No| B
+    H --> I{Is Custom Model?}
+    I -->|Yes| J[Ask for custom instructions]
+    I -->|No| B
+    J --> K{User wants custom?}
+    K -->|Yes| L[Set custom instructions]
+    K -->|No| M[Switch to Socratic model]
+    L --> B
+    M --> B
+```
+
+
+
+
+
+
+
+
 
 ---
 Chat History Database Flow
