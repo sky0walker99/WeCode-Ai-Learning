@@ -26,11 +26,9 @@ socratic_model = SocraticModel(model_name ="gemini-1.5-pro" ,  generation_config
 feynman_model = FeynmanModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = feynman_sys_instruct)
 custom_model = CustomModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = cusotm_sys_instruct)
 
-# Initialize database and score of each model
+# Initialize database 
 init_db()
-socratic_score = 0
-feynman_score = 0
-custom_score = 0
+
 
 # Assinging current chat and current model for main interaction loop.
 current_model = socratic_model
