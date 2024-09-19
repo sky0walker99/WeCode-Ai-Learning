@@ -217,3 +217,18 @@ graph TD
     O --> M
     end
 ```
+
+
+
+
+## 🚀 About Me
+This is a collaborative project developed by a team of four passionate individuals:
+
+- ALEN SUNNY       – AI/ML Specialist, responsible for the AI model architecture 
+- MUHAMMED HAROON  – AI/ML Specialist, responsible for the AI model architecture and core features
+- Muhammed Shahbas – AI/ML Specialist, responsible for the AI model architecture and database integration
+- MALIK DINAR A S  – FullStack Developer, focused on the user interface and experience and server-side logic.
+Our goal is to create an innovative and interactive platform for teaching complex topics like Data Structures and Algorithms using cutting-edge AI technology.
+
+
+
