@@ -53,14 +53,6 @@ classDiagram
         +get_response(user_prompt)
     }
 ```
-## Tech Stack
-
-
-
-* ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) 
-* ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) 
-* ![CSS](https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css3&logoColor=white) 
-* ![HTML](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white) 
 
 ### Frameworks and Libraries
 
@@ -102,10 +94,10 @@ To run this project, you will need to add the following environment variables to
 ## 🚀 About Me
 This is a collaborative project developed by a team of four passionate individuals:
 
-- ALEN SUNNY – AI/ML Specialist, responsible for the AI model architecture 
+- ALEN SUNNY       – AI/ML Specialist, responsible for the AI model architecture 
+- MUHAMMED HAROON  – AI/ML Specialist, responsible for the AI model architecture and core features
+- Muhammed Shahbas – AI/ML Specialist, responsible for the AI model architecture and database integration
 - MALIK DINAR A S  – FullStack Developer, focused on the user interface and experience and server-side logic.
-- MUHAMMED HAROON – AI/ML Specialist, responsible for the AI model architecture and core features
-- [Person 4] – AI/ML Specialist, responsible for the AI model architecture and database integration
 Our goal is to create an innovative and interactive platform for teaching complex topics like Data Structures and Algorithms using cutting-edge AI technology.
 
 
