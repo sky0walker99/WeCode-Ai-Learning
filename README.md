@@ -1,5 +1,118 @@
 # WeCode-Ai-Learning-Assistant
 
-Description : This is an ai assistant which uses the socratic method of questioning for teaching in any topic in DSA and could and can explain any complex topic. The Model can dynamically understand the expertise level of the user of a given topic and the model can change the perception of the user if they say so. the default learning technique is socratic method.there are 4 more additonal learning method which the user can choose from which includes (Feynman Technique,......,...,...,) .Also most importantly the user can define and create a custom learning or teaching method of their own.
-There is also a learnging method profile for cooding leetcode type DSA questions.
+# GENAI powered teaching assistant
+
+An AI-based tool designed to help users learn complex topics such as Data Structures and Algorithms (DSA). The assistant primarily utilizes the Socratic method of questioning but also includes alternative learning techniques. These techniques can be customized by the user to suit their learning style.
+
+
+## Features
+
+- Multiple Learning Methods:
+    - Socratic Method
+    - Feynman Technique
+    - User-defined custom learning methods
+- Dynamic User Expertise Level:
+    - The model can gauge the user’s expertise level and adjust its responses accordingly.
+- User Interaction:
+    - Users can choose their preferred teaching methods and create their own.
+
+
+
+## Learning Techniques
+
+- Socratic Method: Engages users by asking guided questions to deepen understanding.
+- Feynman Technique: Simplifies complex ideas to basic concepts, ensuring full comprehension.
+- Customizable Methods: Users can design their own teaching methods tailored to their learning style.
+## AI Model Architecture
+
+The system relies on a multi-layered model structure that adapts its responses dynamically
+
+```mermaid
+classDiagram
+    AIModel <|-- SentimentModel
+    AIModel <|-- SocraticModel
+    AIModel <|-- FeynmanModel
+    AIModel <|-- CustomModel
+    class AIModel{
+        +model
+        +chat
+        +score
+        +get_response(user_prompt)
+        +update_score(result)
+    }
+    class SentimentModel{
+        +get_response(user_prompt)
+    }
+    class SocraticModel{
+        +get_response(user_prompt)
+    }
+    class FeynmanModel{
+        +get_response(user_prompt)
+    }
+    class CustomModel{
+        +get_response(user_prompt)
+    }
+```
+## Tech Stack
+
+
+
+* ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) 
+* ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) 
+* ![CSS](https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css3&logoColor=white) 
+* ![HTML](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white) 
+
+### Frameworks and Libraries
+
+Additional frameworks and libraries used in this project:
+
+* ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
+
+* ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+
+## Installation
+
+1.Clone the repository:
+
+```bash
+git clone https://github.com/sky0walker99/WeCode-Ai-Learning.git
+
+```
+2.Navigate to the project directory and install dependencies:
+
+```bash
+cd WeCode-Ai-Learning
+pip install -r requirements.txt
+
+```
+3.Run the project
+```bash
+
+python main.py
+
+```
+    
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`API_KEY` : https://aistudio.google.com/app/apikey
+
+
+## 🚀 About Me
+This is a collaborative project developed by a team of four passionate individuals:
+
+- ALEN SUNNY – AI/ML Specialist, responsible for the AI model architecture 
+- MALIK DINAR A S  – FullStack Developer, focused on the user interface and experience and server-side logic.
+- MUHAMMED HAROON – AI/ML Specialist, responsible for the AI model architecture and core features
+- [Person 4] – AI/ML Specialist, responsible for the AI model architecture and database integration
+Our goal is to create an innovative and interactive platform for teaching complex topics like Data Structures and Algorithms using cutting-edge AI technology.
+
+
+
+## 🔗 Links
+- AlenSuny :[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Alen-121)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/)
+[![twitter](https://img.shields.io/badge/twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/)
+
 
