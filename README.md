@@ -1,8 +1,8 @@
 # WeCode-Ai-Learning-Assistant
+
 # GENAI powered teaching assistant
 
 An AI-based tool designed to help users learn complex topics such as Data Structures and Algorithms (DSA). The assistant primarily utilizes the Socratic method of questioning but also includes alternative learning techniques. These techniques can be customized by the user to suit their learning style.
-
 The Model can dynamically understand the expertise level of the user of a given topic and the model can change the perception of the user if they explicitly say so. the default learning technique is socratic method.There is 1 more additonal learning method which the user can choose from which is Feynman Technique .Also most importantly the user can define and create a custom learning or teaching method of their own.The user
 
 ---
@@ -60,39 +60,54 @@ graph TB
 ```
 
 
----
-Class Diagram
+## Features
+
+- Multiple Learning Methods:
+    - Socratic Method
+    - Feynman Technique
+    - User-defined custom learning methods
+- Dynamic User Expertise Level:
+    - The model can gauge the user’s expertise level and adjust its responses accordingly.
+- User Interaction:
+    - Users can choose their preferred teaching methods and create their own.
+
+
+
+## Learning Techniques
+
+- Socratic Method: Engages users by asking guided questions to deepen understanding.
+- Feynman Technique: Simplifies complex ideas to basic concepts, ensuring full comprehension.
+- Customizable Methods: Users can design their own teaching methods tailored to their learning style.
+## AI Model Architecture
+
+The system relies on a multi-layered model structure that adapts its responses dynamically
 
 ```mermaid
 classDiagram
-    class AiModel {
-        -model
-        -chat
-        -score
-        +__init__(model_name, generation_config, system_instruction)
-        +get_response(user_prompt)*
-        +update_score(result, current_score, model_name)*
+    AIModel <|-- SentimentModel
+    AIModel <|-- SocraticModel
+    AIModel <|-- FeynmanModel
+    AIModel <|-- CustomModel
+    class AIModel{
+        +model
+        +chat
+        +score
+        +get_response(user_prompt)
+        +update_score(result)
     }
-    class SentimentModel {
-        +get_result_sentiment(user_prompt)
-    }
-    class SocraticModel {
+    class SentimentModel{
         +get_response(user_prompt)
     }
-    class FeynmanModel {
+    class SocraticModel{
         +get_response(user_prompt)
     }
-    class CustomModel {
+    class FeynmanModel{
         +get_response(user_prompt)
     }
-    AiModel <|-- SentimentModel
-    AiModel <|-- SocraticModel
-    AiModel <|-- FeynmanModel
-    AiModel <|-- CustomModel
+    class CustomModel{
+        +get_response(user_prompt)
+    }
 ```
-
-
-
 
 ---
 visualizes the interaction between users and the AI models in a more emotionally resonant and intuitive way.
@@ -148,9 +163,6 @@ graph TD
     class B,F,J,M action;
 ```
 
-
-
-
 ---
 Code Flow
 
@@ -179,6 +191,14 @@ graph TD
 
 
 
+
+### Frameworks and Libraries
+
+Additional frameworks and libraries used in this project:
+
+* ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
+
+* ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 
 
 
@@ -220,6 +240,34 @@ graph TD
 
 
 
+## Installation
+
+1.Clone the repository:
+
+```bash
+git clone https://github.com/sky0walker99/WeCode-Ai-Learning.git
+
+```
+2.Navigate to the project directory and install dependencies:
+
+```bash
+cd WeCode-Ai-Learning
+pip install -r requirements.txt
+
+```
+3.Run the project
+```bash
+
+python main.py
+
+```
+    
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`API_KEY` : https://aistudio.google.com/app/apikey
+
 
 ## 🚀 About Me
 This is a collaborative project developed by a team of four passionate individuals:
@@ -228,7 +276,20 @@ This is a collaborative project developed by a team of four passionate individua
 - MUHAMMED HAROON  – AI/ML Specialist, responsible for the AI model architecture and core features
 - Muhammed Shahbas – AI/ML Specialist, responsible for the AI model architecture and database integration
 - MALIK DINAR A S  – FullStack Developer, focused on the user interface and experience and server-side logic.
+
+
 Our goal is to create an innovative and interactive platform for teaching complex topics like Data Structures and Algorithms using cutting-edge AI technology.
 
+
+
+## 🔗 Links
+- AlenSuny :[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Alen-121) 
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/alen--sunny/)
+- Muhammed Haroon :[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sky0walker99/) 
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/muhammed-haroon-0399962b8/)
+- Malik Dinar A S :[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/malik-dinar) 
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/malik-dinar-510795234/)
+- Muhammed Shanz :[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Alen-121)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)]([https://www.linkedin.com/](https://www.linkedin.com/in/alen--sunny/))
 
 
