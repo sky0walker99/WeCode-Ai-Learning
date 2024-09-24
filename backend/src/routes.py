@@ -23,8 +23,6 @@ custom_model = CustomModel(model_name ="gemini-1.5-pro" ,  generation_config = g
 
 
 # Assinging current chat and current model for main interaction loop.
-current_model = socratic_model
-current_chat = socratic_model.chat
 
 
 @api_blueprint.route('/')
@@ -53,6 +51,7 @@ def get_user_input():
         'status': 'success',
         'ai_response': ai_response
     }
+    return jsonify(response_data), 200
 
 
 @api_blueprint.route('/api/submit_input', methods =['PSOT'])   # The route for giving the input from user to ai models.
