@@ -71,28 +71,10 @@ while True:
         elif current_model == feynman_model:
             feynman_score = feynman_model.update_score(result, feynman_score, "feynman")
             if feynman_score < -2:
-                current_model = custom_model
-                current_chat = custom_model.chat
-                feynman_score = 0  # Reset score for next model
-                print("Switching to custom model...")
-                choice = (input( "Do you want to create a custom ai model with the learning method you define (y/n) :").lower().strip() )
-                if choice == "y":
-                    user_sys_instruct = input("Write the instructions you want to give for the ai : " )
-                    sys_instruct = user_sys_instruct
-                if choice == "n":
-                    current_model = socratic_model
-                    current_chat = socratic_model.chat
-
-        elif current_model == custom_model and choice == "y" :
-            custom_score = custom_model.update_score(result, custom_score, "custom")
-            
-            print(f"Custom Score: {custom_score}")
-            print(f"Custom Positive Count: {get_positive_sentiment('custom')}")
-            if custom_score < -2:
                 current_model = socratic_model
                 current_chat = socratic_model.chat
-                custom_score = 0  # Reset score for next model
-                print(" Switching back to socratic model ")
+                feynman_score = 0  # Reset score for next model
+                print("Switching to custom model...")
 
     except KeyboardInterrupt:
         break
