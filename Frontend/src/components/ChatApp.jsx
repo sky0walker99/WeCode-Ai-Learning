@@ -26,10 +26,17 @@ const ChatApp = ({ model }) => {
 
     apiService.postInputData(inputDetails).then((data) => {
       console.log('data');
-      console.log(data);
+      console.log(data.data.ai_response);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          sender: 'bot',
+          text: data.data.ai_response, 
+          file: null,  
+        },
+      ]);
     });
 
-    // Reset input and file selection
     setInputValue('');
     setSelectedFile(null);
   };

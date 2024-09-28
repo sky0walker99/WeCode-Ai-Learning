@@ -97,6 +97,43 @@ def submit_input_to_ai():
     }
     return jsonify(response_data), 200
 
+
+@api_blueprint.route("/api/chat_history", methods=["GET"])
+def get_chat_history():
+    # Extract the category from the query parameters, defaulting to 'today' if not provided
+    category = request.args.get("category", "today")
+
+    # Retrieve chat history based on the requested category
+    chat_history = get_chat_by_category(category)
+
+    # If there's no history found, return an appropriate message
+    if not chat_history:
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "message": f"No chats found for category: {category}",
+                }
+            ),
+            404,
+        )
+
+    # Format the retrieved history into a list of dictionaries for JSON response
+    chat_data = []
+    for chat in chat_history:
+        chat_data.append(
+            {
+                "model": chat[0],
+                "user_message": chat[1],
+                "ai_response": chat[2],
+                "timestamp": chat[3],
+            }
+        )
+
+    # Return the chat history in JSON format
+    return jsonify({"status": "success", "chat_history": chat_data}), 200
+
+
 # Start the server
 if __name__ == '__main__':
     app.run(debug=True)
