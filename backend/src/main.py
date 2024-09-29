@@ -11,7 +11,24 @@ from abc import ABC, abstractmethod
 from config import *
 from database import *
 from models import *
+from flask import Flask
+from routes import api_blueprint  # Import the blueprint
 
+# Initialization of models
+sentiment_model = SentimentModel(model_name= "gemini-1.5-flash", generation_config = generation_config, system_instruction = sentiment_sys_instruct)
+socratic_model = SocraticModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = socratic_sys_instruct)
+feynman_model = FeynmanModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = feynman_sys_instruct)
+custom_model = CustomModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = cusotm_sys_instruct)
+
+# Create web application instance
+app = Flask(__name__)
+
+# Register the blueprint
+app.register_blueprint(api_blueprint)
+
+# Start the server
+if __name__ == '__main__':
+    app.run(debug=True)
 # Creating web application instance
 app = Flask(__name__)
 
@@ -20,11 +37,6 @@ load_dotenv()
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
 
-# Initialization of models
-sentiment_model = SentimentModel(model_name= "gemini-1.5-flash", generation_config = generation_config, system_instruction = sentiment_sys_instruct)
-socratic_model = SocraticModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = socratic_sys_instruct)
-feynman_model = FeynmanModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = feynman_sys_instruct)
-custom_model = CustomModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = cusotm_sys_instruct)
 
 # Initialize database 
 init_db()
@@ -59,28 +71,10 @@ while True:
         elif current_model == feynman_model:
             feynman_score = feynman_model.update_score(result, feynman_score, "feynman")
             if feynman_score < -2:
-                current_model = custom_model
-                current_chat = custom_model.chat
-                feynman_score = 0  # Reset score for next model
-                print("Switching to custom model...")
-                choice = (input( "Do you want to create a custom ai model with the learning method you define (y/n) :").lower().strip() )
-                if choice == "y":
-                    user_sys_instruct = input("Write the instructions you want to give for the ai : " )
-                    sys_instruct = user_sys_instruct
-                if choice == "n":
-                    current_model = socratic_model
-                    current_chat = socratic_model.chat
-
-        elif current_model == custom_model and choice == "y" :
-            custom_score = custom_model.update_score(result, custom_score, "custom")
-            
-            print(f"Custom Score: {custom_score}")
-            print(f"Custom Positive Count: {get_positive_sentiment('custom')}")
-            if custom_score < -2:
                 current_model = socratic_model
                 current_chat = socratic_model.chat
-                custom_score = 0  # Reset score for next model
-                print(" Switching back to socratic model ")
+                feynman_score = 0  # Reset score for next model
+                print("Switching to custom model...")
 
     except KeyboardInterrupt:
         break

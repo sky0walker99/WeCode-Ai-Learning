@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import apiService from '../service/api.service';
 
 const ChatApp = ({ model }) => {
   const [messages, setMessages] = useState([]);
@@ -19,24 +20,23 @@ const ChatApp = ({ model }) => {
       },
     ]);
 
-    // Respond based on the active model
-    if (model === 'custom') {
-      setTimeout(() => {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { sender: 'bot', text: "This is a custom model response." },
-        ]);
-      }, 1000);
-    } else {
-      setTimeout(() => {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { sender: 'bot', text: "This is the default model response." },
-        ]);
-      }, 1000);
+    const inputDetails = {
+      "user_input" : inputValue,
     }
 
-    // Reset input and file selection
+    apiService.postInputData(inputDetails).then((data) => {
+      console.log('data');
+      console.log(data.data.ai_response);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          sender: 'bot',
+          text: data.data.ai_response, 
+          file: null,  
+        },
+      ]);
+    });
+
     setInputValue('');
     setSelectedFile(null);
   };
