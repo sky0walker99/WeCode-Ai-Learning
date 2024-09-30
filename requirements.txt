@@ -13,3 +13,4 @@ MarkupSafe==2.1.5
 Jinja2==3.1.4
 itsdangerous==2.2.0
 DateTime==5.5
+ipython==8.27.0
