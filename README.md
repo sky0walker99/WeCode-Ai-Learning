@@ -1,64 +1,8 @@
 # WeCode-Ai-Learning-Assistant
 
-# GENAI powered teaching assistant
+ **GENAI powered teaching assistant**
 
-An AI-based tool designed to help users learn complex topics such as Data Structures and Algorithms (DSA). The assistant primarily utilizes the Socratic method of questioning but also includes alternative learning techniques. These techniques can be customized by the user to suit their learning style.
-The Model can dynamically understand the expertise level of the user of a given topic and the model can change the perception of the user if they explicitly say so. the default learning technique is socratic method.There is 1 more additonal learning method which the user can choose from which is Feynman Technique .Also most importantly the user can define and create a custom learning or teaching method of their own.
-
----
-Complete System Architecture
-
-```mermaid
-graph TB
-    subgraph User Interface
-        A[User Input] --> B[Main Interaction Loop]
-        B --> C[Display AI Response]
-    end
-
-    subgraph AI Models
-        D[AiModel]
-        D --> |Inherits| E[SentimentModel]
-        D --> |Inherits| F[SocraticModel]
-        D --> |Inherits| G[FeynmanModel]
-        D --> |Inherits| H[CustomModel]
-    end
-
-    subgraph Model Switching Logic
-        I[Current Model] --> J{Score < -2?}
-        J -->|Yes| K[Switch Model]
-        J -->|No| I
-        K --> L{Is Custom?}
-        L -->|Yes| M[Prompt for Instructions]
-        L -->|No| I
-    end
-
-    subgraph Database Operations
-        N[(SQLite Database)]
-        O[Initialize DB] --> N
-        P[Save Chat History] --> N
-        Q[Update Sentiment] --> N
-        R[Get Chat by Category] --> N
-    end
-
-    subgraph Chat Categorization
-        S[New Chat Entry] --> T{Categorize}
-        T --> U[Today]
-        T --> V[Yesterday]
-        T --> W[Previous 7 days]
-        T --> X[Older]
-    end
-
-    B --> E
-    B --> I
-    I --> F
-    I --> G
-    I --> H
-    B --> P
-    B --> Q
-    C --> R
-    P --> S
-```
-
+WeCode-Ai-Learning-Assistant is an AI-based tool designed to enhance users' learning experience in complex subjects like Data Structures and Algorithms (DSA). By utilizing dynamic teaching methodologies, including the Socratic method and Feynman technique, the assistant can be customized to fit the learner’s individual style. The system intelligently adapts to the user’s expertise level, ensuring an engaging and effective learning journey.
 
 ## Features
 
@@ -67,18 +11,18 @@ graph TB
     - Feynman Technique
     - User-defined custom learning methods
 - Dynamic User Expertise Level:
-    - The model can gauge the user’s expertise level and adjust its responses accordingly.
+    - The AI gauges the user's proficiency level and adapts its explanations and difficulty accordingly.
 - User Interaction:
     - Users can choose their preferred teaching methods and create their own.
 
 
 
-## Learning Techniques
+### Learning Techniques
 
-- Socratic Method: Engages users by asking guided questions to deepen understanding.
-- Feynman Technique: Simplifies complex ideas to basic concepts, ensuring full comprehension.
-- Customizable Methods: Users can design their own teaching methods tailored to their learning style.
-## AI Model Architecture
+- Socratic Method: Engages learners through probing questions that challenge them to think critically and discover answers on their own.
+- Feynman Technique:  Forces learners to explain concepts in simple terms, ensuring mastery of the subject matter.
+- Customizable Methods: Offers flexibility for users to craft their own teaching strategies, adapting the assistant to personal preferences and needs.
+## AI Model Architectures
 
 The system relies on a multi-layered model structure that adapts its responses dynamically
 
@@ -108,10 +52,7 @@ classDiagram
         +get_response(user_prompt)
     }
 ```
-
----
-visualizes the interaction between users and the AI models in a more emotionally resonant and intuitive way.
-## Technical Implementation
+ **Technical Implementation**
 
 The diagram represents a sentiment-driven, adaptive multi-model AI system. Sentiment analysis is performed on each user interaction using a dedicated SentimentModel, quantifying emotional context. A cumulative scoring mechanism (-1 for negative, 0 for neutral, +1 for positive) triggers model switching when the score falls below -2. The system employs three distinct models (Socratic, Feynman, and Custom) with inheritance from a base AiModel class, each implementing unique response generation strategies. The Custom model, when activated, allows for dynamic system instruction updates, enhancing adaptability. This architecture enables continuous learning and optimization based on user interactions and feedback.
 
@@ -164,7 +105,7 @@ graph TD
 ```
 
 ---
-Code Flow
+**Code Flow**
 
 ```mermaid
 graph TD
@@ -185,25 +126,8 @@ graph TD
     L --> B
     M --> B
 ```
-
-
-
-
-
-
-
-### Frameworks and Libraries
-
-Additional frameworks and libraries used in this project:
-
-* ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
-
-* ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-
-
-
 ---
-Chat History Database Flow
+**Chat History Database Flow**
 
 ```mermaid
 graph TD
@@ -237,10 +161,22 @@ graph TD
     O --> M
     end
 ```
+---
 
 
 
-## Installation
+
+
+
+### Frameworks and Libraries
+
+Additional frameworks and libraries used in this project:
+
+* ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
+
+* ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+
+### Installation
 
 1.Clone the repository:
 
@@ -248,17 +184,30 @@ graph TD
 git clone https://github.com/sky0walker99/WeCode-Ai-Learning.git
 
 ```
-2.Navigate to the project directory and install dependencies:
+2.Navigate to the project directory and install dependencies :
 
 ```bash
 cd WeCode-Ai-Learning
 pip install -r requirements.txt
 
 ```
-3.Run the project
+3.Install React frontend dependencies: :
+
+```bash
+cd frontend
+npm install
+```
+4.Run the project
 ```bash
 
 python main.py
+
+```
+5.Run the React frontend
+```bash
+
+cd frontend
+npm start
 
 ```
     
@@ -277,7 +226,6 @@ This is a collaborative project developed by a team of four passionate individua
 - Muhammed Shahbas – AI/ML Specialist, responsible for the AI model architecture and database integration
 - MALIK DINAR A S  – FullStack Developer, focused on the user interface and experience and server-side logic.
 
-
 Our goal is to create an innovative and interactive platform for teaching complex topics like Data Structures and Algorithms using cutting-edge AI technology.
 
 
@@ -289,7 +237,8 @@ Our goal is to create an innovative and interactive platform for teaching comple
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/muhammed-haroon-0399962b8/)
 - Malik Dinar A S :[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/malik-dinar) 
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/malik-dinar-510795234/)
-- Muhammed Shanz :[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Alen-121)
-[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)]([https://www.linkedin.com/](https://www.linkedin.com/in/alen--sunny/))
+- Muhammed Shahbas :[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Blaacknight)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/shahbas-v-s-7055ab2a9/)
+
 
 
