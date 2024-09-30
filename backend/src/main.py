@@ -23,6 +23,9 @@ custom_model = CustomModel(model_name ="gemini-1.5-pro" ,  generation_config = g
 # Create web application instance
 app = Flask(__name__)
 
+# Enable CORS for all routes
+CORS(app)
+
 # Register the blueprint
 app.register_blueprint(api_blueprint)
 
@@ -63,6 +66,7 @@ while True:
         if current_model == socratic_model:
             socratic_score = socratic_model.update_score(result, socratic_score , "socratic")
             if socratic_score < -2:
+                print("switched")
                 current_model = feynman_model
                 current_chat = feynman_model.chat
                 socratic_score = 0  # Reset score for next model
@@ -71,6 +75,7 @@ while True:
         elif current_model == feynman_model:
             feynman_score = feynman_model.update_score(result, feynman_score, "feynman")
             if feynman_score < -2:
+                print("switched")
                 current_model = socratic_model
                 current_chat = socratic_model.chat
                 feynman_score = 0  # Reset score for next model
