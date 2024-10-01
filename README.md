@@ -166,6 +166,8 @@ graph TD
 
 
 
+
+
 ### Frameworks and Libraries
 
 Additional frameworks and libraries used in this project:
@@ -173,7 +175,6 @@ Additional frameworks and libraries used in this project:
 * ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
 
 * ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-
 
 ### Installation
 
