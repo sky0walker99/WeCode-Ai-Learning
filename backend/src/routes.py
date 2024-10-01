@@ -55,7 +55,7 @@ def get_user_input():
     
     # Response generation and saving chat in history
     ai_response = current_model.get_response(user_prompt)
-    # save_chat_history("socratic", user_prompt, ai_response)
+    save_chat_history("socratic", user_prompt, ai_response)
     
     print(f"WeCode Ai: {ai_response}")
     
