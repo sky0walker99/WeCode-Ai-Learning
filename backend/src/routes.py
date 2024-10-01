@@ -14,20 +14,17 @@ from datetime import datetime, timedelta
 from config import *
 from database import *
 
-# from main import *
-# from flask import Flask
-
 # routes.py or main.py
 
 load_dotenv()
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
-# app = Flask(__name__)
 
 # Creating web application instance
 api_blueprint = Blueprint("api", __name__)
 
 
-## model
+socratic_score = 0
+feynman_score = 0
 
 
 @api_blueprint.route("/")
@@ -38,6 +35,9 @@ def custom():
 # The endpoint should be set up to handle POST requests since the user's input will be sent as a JSON payload
 @api_blueprint.route("/api/get_user_input", methods=["POST"])
 def get_user_input():
+    global socratic_score  # Declare global to modify the global score
+    global feynman_score  # Declare global to modify the global score
+
     # Initialization of models
     sentiment_model = SentimentModel(
         model_name="gemini-1.5-flash",
@@ -76,9 +76,6 @@ def get_user_input():
 
     print(f"WeCode Ai: {ai_response}")
 
-    socratic_score = 0
-    feynman_score = 0
-
     if current_model == socratic_model:
         socratic_score = socratic_model.update_score(result, socratic_score, "socratic")
         if socratic_score < -2:
@@ -95,25 +92,22 @@ def get_user_input():
             feynman_score = 0  # Reset score for next model
             print("Switching to custom model...")
 
+    # Get the class name of the current model
+    current_model_name = current_model.__class__.__name__
+
+    print(
+        current_model_name
+    )  # This will print the model name like "SocraticModel" or "FeynmanModel"
+    print("x", feynman_score)
+    print("y", socratic_score)
+    print("model")
+
     # Process the input, pass it to an AI model, and return the response
     response_data = {
         "received_input": user_prompt,
         "status": "success",
+        "model": current_model_name,
         "ai_response": ai_response,
-    }
-    return jsonify(response_data), 200
-
-
-@api_blueprint.route("/api/submit_input", methods=["PSOT"]
-)  # The route for giving the input from user to ai models.
-def submit_input_to_ai():
-    data = request.get_json()
-    user_input = data.get("user_input", "")
-    ai_result = f"ai: {user_input}"
-    response_data = {
-        "received_input": user_input,
-        "ai_result": ai_result,
-        "status": "success",
     }
     return jsonify(response_data), 200
 
