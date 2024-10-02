@@ -3,8 +3,12 @@ echo "Installing npm dependencies in the Frontend directory..."
 cd Frontend || { echo "Frontend directory not found"; exit 1; }
 npm install
 
+# Start the frontend
+npm run dev &
+
+# Go back to the root directory
 cd ..
 
-# Run both frontend and backend using concurrently
-echo "Starting both frontend and backend..."
-npx concurrently "npm run dev" "python ./backend/src/main.py"
+# Start the backend
+echo "Starting the backend..."
+python ./backend/src/main.py
