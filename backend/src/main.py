@@ -21,7 +21,9 @@ feynman_model = FeynmanModel(model_name ="gemini-1.5-pro" ,  generation_config =
 custom_model = CustomModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = cusotm_sys_instruct)
 
 # Create web application instance
-app = Flask(__name__)
+#app = Flask(__name__)
+
+app = Flask(__name__, static_folder='dist')
 
 # Register the blueprint
 app.register_blueprint(api_blueprint)
@@ -29,13 +31,14 @@ app.register_blueprint(api_blueprint)
 # Start the server
 if __name__ == '__main__':
     app.run(debug=True)
+    
 # Creating web application instance
-app = Flask(__name__)
+#app = Flask(__name__)
+app = Flask(__name__, static_folder='dist')
 
 # Load the API key from the .env file
 load_dotenv()
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
-
 
 
 # Initialize database 
@@ -45,6 +48,7 @@ init_db()
 # Assinging current chat and current model for main interaction loop.
 current_model = socratic_model
 current_chat = socratic_model.chat
+
 
 # Main interaction loop
 while True:
@@ -80,6 +84,4 @@ while True:
         break
 
 
-# Start the server
-if __name__ == '__main__':
-    app.run(debug=True)
+

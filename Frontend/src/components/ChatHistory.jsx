@@ -8,7 +8,7 @@ const ChatHistory = () => {
   useEffect(() => {
     const fetchChatHistory = async () => {
       try {
-        const response = await apiService.getChatHistory(); 
+        const response = await apiService.getChatHistory();
         const history = response.data.chat_history; // Get the 'chat_history' array from the response
 
         const transformedMessages = history.map((entry) => [
@@ -22,8 +22,8 @@ const ChatHistory = () => {
       }
     };
 
-    fetchChatHistory(); 
-  }, []);
+    fetchChatHistory();
+  }, [messages]);
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100 w-full">
@@ -34,7 +34,7 @@ const ChatHistory = () => {
             <div key={index} className={`flex mb-2 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`${message.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'} p-3 rounded-lg max-w-xs`}>
                 <div>{message.text}</div>
-                <div className="text-xs text-gray-500 mt-1"> {new Date(message.timestamp).toLocaleDateString()} {new Date(message.timestamp).toLocaleTimeString()}</div> 
+                <div className="text-xs text-gray-500 mt-1"> {new Date(message.timestamp).toLocaleDateString()} {new Date(message.timestamp).toLocaleTimeString()}</div>
               </div>
             </div>
           ))}
