@@ -17,23 +17,12 @@ from database import *
 
 # Create web application instance
 #app = Flask(__name__)
-app = Flask(__name__, static_folder='../static')
-# Creating web application instance
+
+
+
 api_blueprint = Blueprint('api', __name__)
 
 
-
-app = Flask(__name__, static_folder='../..static')
-
-# Route for serving the React frontend
-
-
-@api_blueprint.route('/', defaults={'path': ''})
-@api_blueprint.route('/')
-def serve():
-    print("ooooooooooooooooooooooofffffffffffff")
-    # Serve the React app for all other routes
-    return send_from_directory(api_blueprint.static_folder, 'index.html')
 
 
 # Score function to evaluate sentiment and update score
