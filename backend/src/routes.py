@@ -34,7 +34,6 @@ def index():
 @api_blueprint.route('/')
 def serve():
     print("ooooooooooooooooooooooofffffffffffff")
-    
     # Serve the React app for all other routes
     return send_from_directory(api_blueprint.static_folder, 'index.html')
 

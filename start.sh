@@ -10,4 +10,5 @@ cd .. || { echo "Failed to return to project root"; exit 1; }
 
 # Run both frontend and backend using concurrently
 echo "Starting both frontend and backend..."
+cd Frontend
 npx concurrently "npm run dev" "python ./backend/src/main.py"
