@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 from config import *
 from database import *
 
-# routes.py or main.py
+
 
 load_dotenv()
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
@@ -24,8 +24,6 @@ api_blueprint = Blueprint('api', __name__)
 
 app = Flask(__name__, static_folder='dist')
 
-
-CORS(app)
 
 @api_blueprint.route('/')
 def serve_react_app():

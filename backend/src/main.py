@@ -24,7 +24,7 @@ custom_model = CustomModel(model_name ="gemini-1.5-pro" ,  generation_config = g
 app = Flask(__name__)
 
 # Enable CORS for all routes
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]}})
 
 # Register the blueprint
 app.register_blueprint(api_blueprint)
