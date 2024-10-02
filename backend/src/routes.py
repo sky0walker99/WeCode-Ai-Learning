@@ -24,6 +24,9 @@ api_blueprint = Blueprint('api', __name__)
 
 app = Flask(__name__, static_folder='dist')
 
+
+CORS(app)
+
 @api_blueprint.route('/')
 def serve_react_app():
     return send_from_directory(app.static_folder, 'index.html')
@@ -39,6 +42,9 @@ socratic_model = SocraticModel(model_name ="gemini-1.5-pro" ,  generation_config
 feynman_model = FeynmanModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = feynman_sys_instruct)
 custom_model = CustomModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = cusotm_sys_instruct)
 
+
+socratic_score = 0
+feynman_score = 0
 
 # The endpoint should be set up to handle POST requests since the user's input will be sent as a JSON payload
 @api_blueprint.route('/api/get_user_input', methods=['POST'])
@@ -61,8 +67,8 @@ def get_user_input():
     
     #print(f"WeCode Ai: {ai_response}")
     
-    socratic_score = 0
-    feynman_score = 0
+    global socratic_score
+    global feynman_score
 
     if current_model == socratic_model:
         socratic_score = socratic_model.update_score(result, socratic_score , "socratic")
@@ -139,4 +145,4 @@ def get_chat_history():
 
 # Start the server
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",debug=True)
+    app.run(host="0.0.0.0")

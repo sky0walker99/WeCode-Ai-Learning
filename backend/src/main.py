@@ -31,7 +31,7 @@ app.register_blueprint(api_blueprint)
 
 # Start the server
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",debug=True)
+    app.run(host="0.0.0.0")
     
     
 # Creating web application instance
@@ -91,4 +91,4 @@ while True:
 
 # Start the server
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",debug=True)
+    app.run(host="0.0.0.0")
