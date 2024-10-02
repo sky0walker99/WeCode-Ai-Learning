@@ -23,6 +23,7 @@ genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 api_blueprint = Blueprint('api', __name__)
 
 app = Flask(__name__, static_folder='dist')
+CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]}})
 
 
 @api_blueprint.route('/')
