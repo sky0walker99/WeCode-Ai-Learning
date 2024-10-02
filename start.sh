@@ -6,4 +6,5 @@ npm install
 
 # Run both frontend and backend using concurrently
 echo "Starting both frontend and backend..."
+cd frontend
 npm run dev
