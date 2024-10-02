@@ -25,8 +25,7 @@ api_blueprint = Blueprint('api', __name__)
 app = Flask(__name__, static_folder='dist')
 
 #CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]}})
-CORS(app, resources={r"/*": {"origins": ["https://wecode-ai-learning.onrender.com/"]}})
-
+#
 
 @api_blueprint.route('/')
 def serve_react_app():

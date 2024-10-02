@@ -24,7 +24,8 @@ custom_model = CustomModel(model_name ="gemini-1.5-pro" ,  generation_config = g
 app = Flask(__name__,static_folder='dist')
 
 # Enable CORS for all routes
-CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]}})
+#CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]}})
+CORS(app, resources={r"/*": {"origins": ["https://wecode-ai-learning.onrender.com/"]}})
 
 # Register the blueprint
 app.register_blueprint(api_blueprint)
