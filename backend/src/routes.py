@@ -1,5 +1,5 @@
 # routes.py
-from flask import Blueprint, request, jsonify
+from flask import Flask , Blueprint, request, jsonify
 from models import *
 from abc import ABC, abstractmethod
 from config import *
@@ -14,7 +14,19 @@ from datetime import datetime, timedelta
 from config import *
 from database import *
 
-# routes.py or main.py
+
+# Create web application instance
+app = Flask(__name__)
+
+# Score function to evaluate sentiment and update score
+def update_score(result, current_score, model_name):
+    review = ["positive", "neutral", "negative"]
+    if result == review[0]:
+        current_score += 1
+        update_positive_sentiment(model_name)  # Update positive sentiment count in DB
+    elif result == review[2]:
+        current_score -= 1
+    return current_score
 
 load_dotenv()
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
@@ -22,25 +34,26 @@ genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 # Creating web application instance
 api_blueprint = Blueprint('api', __name__)
 
+#Score Variables initialization
+socratic_score = 0
+feynman_score = 0
+custom_score = 0
 
-## model 
-
-
-
-@api_blueprint.route('/')
-def custom():
-    return "<h2>  THIs is testing  <h2>"
-
+    
+# Initialization of models
+sentiment_model = SentimentModel(model_name= "gemini-1.5-flash", generation_config = generation_config, system_instruction = sentiment_sys_instruct)
+socratic_model = SocraticModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = socratic_sys_instruct)
+feynman_model = FeynmanModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = feynman_sys_instruct)
+custom_model = CustomModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = cusotm_sys_instruct)
 
 # The endpoint should be set up to handle POST requests since the user's input will be sent as a JSON payload
 @api_blueprint.route('/api/get_user_input', methods=['POST'])
 def get_user_input():
-        # Initialization of models
-    sentiment_model = SentimentModel(model_name= "gemini-1.5-flash", generation_config = generation_config, system_instruction = sentiment_sys_instruct)
-    socratic_model = SocraticModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = socratic_sys_instruct)
-    feynman_model = FeynmanModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = feynman_sys_instruct)
-    custom_model = CustomModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = cusotm_sys_instruct)
+    global socratic_score
+    global feynman_score
+    global custom_score
 
+    
     # Assinging current chat and current model for main interaction loop.
     current_model = socratic_model
     current_chat = socratic_model.chat
@@ -57,11 +70,9 @@ def get_user_input():
     
     print(f"WeCode Ai: {ai_response}")
     
-    socratic_score = 0
-    feynman_score = 0
-
     if current_model == socratic_model:
         socratic_score = socratic_model.update_score(result, socratic_score , "socratic")
+        print(f"socratic score: {socratic_score} ")
         if socratic_score < -2:
             current_model = feynman_model
             current_chat = feynman_model.chat

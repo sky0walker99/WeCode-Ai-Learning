@@ -1,5 +1,7 @@
 import google.generativeai as genai
 from abc import ABC , abstractmethod
+from database import *
+
 
 # Created a base class (Aimodel) and a subclass of models (socratic,feynman,etc) which inherits from the base class.
 class AiModel():

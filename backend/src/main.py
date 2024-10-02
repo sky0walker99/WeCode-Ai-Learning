@@ -26,11 +26,12 @@ app = Flask(__name__)
 # Register the blueprint
 app.register_blueprint(api_blueprint)
 
+CORS(app)
+
 # Start the server
 if __name__ == '__main__':
     app.run(debug=True)
-# Creating web application instance
-app = Flask(__name__)
+
 
 # Load the API key from the .env file
 load_dotenv()
@@ -46,6 +47,10 @@ init_db()
 current_model = socratic_model
 current_chat = socratic_model.chat
 
+
+
+
+"""
 # Main interaction loop
 while True:
     try:
@@ -79,7 +84,4 @@ while True:
     except KeyboardInterrupt:
         break
 
-
-# Start the server
-if __name__ == '__main__':
-    app.run(debug=True)
+"""

@@ -117,3 +117,12 @@ def get_positive_sentiment(model):
     return count
 
 
+# Score function to evaluate sentiment and update score
+def update_score(result, current_score, model_name):
+    review = ["positive", "neutral", "negative"]
+    if result == review[0]:
+        current_score += 1
+        update_positive_sentiment(model_name)  # Update positive sentiment count in DB
+    elif result == review[2]:
+        current_score -= 1
+    return current_score
