@@ -32,6 +32,8 @@ app.register_blueprint(api_blueprint)
 # Start the server
 if __name__ == '__main__':
     app.run(debug=True)
+    
+    
 # Creating web application instance
 app = Flask(__name__)
 
@@ -49,6 +51,7 @@ init_db()
 current_model = socratic_model
 current_chat = socratic_model.chat
 
+"""
 # Main interaction loop
 while True:
     try:
@@ -59,7 +62,7 @@ while True:
         # Response Generation and saving chat in history.
         ai_response = current_model.get_response(user_prompt)
         save_chat_history("socratic",user_prompt, ai_response) # saving chat history with category.
-        print(f"WeCode Ai: {ai_response}")
+        #print(f"WeCode Ai: {ai_response}")
         
         # Updating score and switching the model
         
@@ -83,6 +86,7 @@ while True:
 
     except KeyboardInterrupt:
         break
+"""
 
 
 # Start the server
