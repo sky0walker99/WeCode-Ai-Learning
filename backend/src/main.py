@@ -21,7 +21,7 @@ feynman_model = FeynmanModel(model_name ="gemini-1.5-pro" ,  generation_config =
 custom_model = CustomModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = cusotm_sys_instruct)
 
 # Create web application instance
-app = Flask(__name__, static_folder='static')
+app = Flask(__name__, static_folder='../static')
 
 # Register the blueprint
 app.register_blueprint(api_blueprint)
