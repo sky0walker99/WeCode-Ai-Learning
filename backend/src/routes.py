@@ -1,5 +1,5 @@
 # routes.py
-from flask import Flask , Blueprint, request, jsonify
+from flask import Flask , Blueprint, request, jsonify ,send_from_directory
 from models import *
 from abc import ABC, abstractmethod
 from config import *
@@ -16,7 +16,28 @@ from database import *
 
 
 # Create web application instance
-app = Flask(__name__)
+#app = Flask(__name__)
+
+# Creating web application instance
+api_blueprint = Blueprint('api', __name__)
+"""
+app = Flask(__name__, static_folder='static')
+
+# Route for serving the React frontend
+@app.route('/')
+def index():
+    return send_from_directory(app.static_folder, 'index.html')
+    
+"""
+
+@api_blueprint.route('/', defaults={'path': ''})
+@api_blueprint.route('/')
+def serve():
+    print("ooooooooooooooooooooooofffffffffffff")
+    
+    # Serve the React app for all other routes
+    return send_from_directory(api_blueprint.static_folder, 'index.html')
+
 
 # Score function to evaluate sentiment and update score
 def update_score(result, current_score, model_name):
@@ -31,8 +52,6 @@ def update_score(result, current_score, model_name):
 load_dotenv()
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
-# Creating web application instance
-api_blueprint = Blueprint('api', __name__)
 
 #Score Variables initialization
 socratic_score = 0
@@ -68,7 +87,7 @@ def get_user_input():
     ai_response = current_model.get_response(user_prompt)
     # save_chat_history("socratic", user_prompt, ai_response)
     
-    print(f"WeCode Ai: {ai_response}")
+    #print(f"WeCode Ai: {ai_response}")
     
     if current_model == socratic_model:
         socratic_score = socratic_model.update_score(result, socratic_score , "socratic")
