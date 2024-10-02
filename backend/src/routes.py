@@ -23,7 +23,9 @@ genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 api_blueprint = Blueprint('api', __name__)
 
 app = Flask(__name__, static_folder='dist')
-CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]}})
+
+#CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]}})
+CORS(app, resources={r"/*": {"origins": ["https://wecode-ai-learning.onrender.com/"]}})
 
 
 @api_blueprint.route('/')
@@ -83,7 +85,7 @@ def get_user_input():
             current_model = socratic_model
             current_chat = socratic_model.chat
             feynman_score = 0  # Reset score for next model
-            print("Switching to custom model...")
+            print("Switching to socratic model...")
 
     # Get the class name of the current model
     current_model_name = current_model.__class__.__name__

@@ -21,21 +21,13 @@ feynman_model = FeynmanModel(model_name ="gemini-1.5-pro" ,  generation_config =
 custom_model = CustomModel(model_name ="gemini-1.5-pro" ,  generation_config = generation_config, system_instruction = cusotm_sys_instruct)
 
 # Create web application instance
-app = Flask(__name__)
+app = Flask(__name__,static_folder='dist')
 
 # Enable CORS for all routes
 CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]}})
 
 # Register the blueprint
 app.register_blueprint(api_blueprint)
-
-# Start the server
-if __name__ == '__main__':
-    app.run(host="0.0.0.0")
-    
-    
-# Creating web application instance
-app = Flask(__name__)
 
 # Load the API key from the .env file
 load_dotenv()
@@ -51,44 +43,13 @@ init_db()
 current_model = socratic_model
 current_chat = socratic_model.chat
 
-"""
-# Main interaction loop
-while True:
-    try:
-        user_prompt = input("Prompt: ")
-        
-        # Sentiment analysis result
-        result = sentiment_model.get_result_sentiment(user_prompt)
-        # Response Generation and saving chat in history.
-        ai_response = current_model.get_response(user_prompt)
-        save_chat_history("socratic",user_prompt, ai_response) # saving chat history with category.
-        #print(f"WeCode Ai: {ai_response}")
-        
-        # Updating score and switching the model
-        
-        if current_model == socratic_model:
-            socratic_score = socratic_model.update_score(result, socratic_score , "socratic")
-            if socratic_score < -2:
-                print("switched")
-                current_model = feynman_model
-                current_chat = feynman_model.chat
-                socratic_score = 0  # Reset score for next model
-                print("Switching to Feynman model...")
-
-        elif current_model == feynman_model:
-            feynman_score = feynman_model.update_score(result, feynman_score, "feynman")
-            if feynman_score < -2:
-                print("switched")
-                current_model = socratic_model
-                current_chat = socratic_model.chat
-                feynman_score = 0  # Reset score for next model
-                print("Switching to custom model...")
-
-    except KeyboardInterrupt:
-        break
-"""
-
-
 # Start the server
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
+    
+    
+# Creating web application instance
+#app = Flask(__name__)
+
+
+
