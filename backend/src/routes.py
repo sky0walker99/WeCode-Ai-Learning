@@ -15,17 +15,16 @@ from config import *
 from database import *
 
 
-
 load_dotenv()
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
 # Creating web application instance
 api_blueprint = Blueprint('api', __name__)
 
+
 app = Flask(__name__, static_folder='dist')
 
-#CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]}})
-#
+
 
 @api_blueprint.route('/')
 def serve_react_app():
@@ -50,7 +49,6 @@ feynman_score = 0
 @api_blueprint.route('/api/get_user_input', methods=['POST'])
 def get_user_input():
     
-
     # Assinging current chat and current model for main interaction loop.
     current_model = socratic_model
     current_chat = socratic_model.chat
@@ -58,7 +56,7 @@ def get_user_input():
     data = request.get_json()                  # Extract JSON data from the request
     user_prompt = data.get('user_input', '')   # Get the user input from the JSON data
 
-    # Ensure that sentiment_model and current_model are defined globally or imported
+    # Ensure that sentiment_model and current_model are defined imported
     result = sentiment_model.get_result_sentiment(user_prompt)
     
     # Response generation and saving chat in history
@@ -76,7 +74,7 @@ def get_user_input():
             current_model = feynman_model
             current_chat = feynman_model.chat
             socratic_score = 0  # Reset score for next model
-            print("Switching to Feynman model...")
+            #print("Switching to Feynman model...")
 
     elif current_model == feynman_model:
         feynman_score = feynman_model.update_score(result, feynman_score, "feynman")
@@ -84,7 +82,7 @@ def get_user_input():
             current_model = socratic_model
             current_chat = socratic_model.chat
             feynman_score = 0  # Reset score for next model
-            print("Switching to socratic model...")
+            #print("Switching to socratic model...")
 
     # Get the class name of the current model
     current_model_name = current_model.__class__.__name__

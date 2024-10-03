@@ -116,4 +116,24 @@ def get_positive_sentiment(model):
     conn.close()
     return count
 
+#Function for clearing the database
+def clear_db():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    # Clear data from ChatHistory
+    cursor.execute("DELETE FROM ChatHistory")
+
+    # Clear data from SentimentCount and reset values
+    cursor.execute("DELETE FROM SentimentCount")
+    cursor.execute("""
+        INSERT INTO SentimentCount (model, positive_count) VALUES 
+        ('socratic', 0),
+        ('feynman', 0)
+    """)
+
+    conn.commit()
+    conn.close()
+
+
 

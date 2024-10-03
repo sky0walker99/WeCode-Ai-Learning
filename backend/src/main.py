@@ -39,6 +39,7 @@ genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 # Initialize database 
 init_db()
 
+#clear_db()      # uncomment this for clearing the database
 
 # Assinging current chat and current model for main interaction loop.
 current_model = socratic_model
@@ -49,8 +50,5 @@ if __name__ == '__main__':
     app.run(host="0.0.0.0")
     
     
-# Creating web application instance
-#app = Flask(__name__)
-
 
 
